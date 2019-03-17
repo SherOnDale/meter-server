@@ -1,0 +1,18 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: meter-sherondale-me-tls
+spec:
+  secretName: meter-sherondale-me
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: meter.sherondale.me
+  dnsNames:
+    - meter.sherondale.me
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx
+        domains:
+          - meter.sherondale.me
