@@ -1,0 +1,23 @@
+{
+  "name": "meter-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SherOnDale/meter-server.git"
+  },
+  "author": "Sherin Binu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SherOnDale/meter-server/issues"
+  },
+  "homepage": "https://github.com/SherOnDale/meter-server#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "pg": "^7.9.0"
+  }
+}
