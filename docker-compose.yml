@@ -3,20 +3,19 @@ services:
   postgres:
     image: "postgres:latest"
     environment:
-      - POSTGRES_USER=test_user
-      - POSTGRES_DD=test_db
       - POSTGRES_PASSWORD=test_password
   server:
     build:
       dockerfile: Dockerfile.dev
       context: .
     volumes:
-      - /app/node_modules
       - .:/app
+    ports:
+      - 5000:5000
     environment:
-      - POSTGRES_USER=test_user
+      - POSTGRES_USER=postgres
       - POSTGRES_HOST=postgres
-      - POSTGRES_DD=test_db
+      - POSTGRES_DD=postgres
       - POSTGRES_PASSWORD=test_password
       - POSTGRES_PORT=5432
       - NODE_ENV=development

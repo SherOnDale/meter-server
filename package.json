@@ -17,6 +17,7 @@
   "homepage": "https://github.com/SherOnDale/meter-server#readme",
   "dependencies": {
     "express": "^4.16.4",
+    "helmet": "^3.16.0",
     "pg": "^7.9.0"
   },
   "devDependencies": {

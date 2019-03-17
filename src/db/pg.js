@@ -8,9 +8,9 @@ const pg = new Pool({
   port: process.env.POSTGRES_PORT
 });
 
-pgClient.on('error', () => console.log('Lost PG connection'));
-pgClient
-  .query('CREATE TABLE IF NOT EXISTS users (number INT)')
-  .catch(error => console.log(error));
+pg.on('error', () => console.log('Lost PG connection'));
+pg.query('CREATE TABLE IF NOT EXISTS users (number INT)').catch(error =>
+  console.log(error)
+);
 
 module.exports = pg;
