@@ -1,10 +1,11 @@
 const router = require('express').Router();
+const userController = require('../controllers/user.controller');
 
 router
   .route('/')
-  .post((req, res) => {})
-  .put((req, res) => {});
+  .post(userController.create)
+  .put(userController.update);
 
-router.route('/:hash').get((req, res) => {});
+router.route('/:hash').get(userController.activate);
 
 module.exports = router;
