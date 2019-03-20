@@ -2,12 +2,19 @@ const express = require("express");
 const helmet = require("helmet");
 const userRoutes = require("./routes/user.route");
 const authRoutes = require("./routes/auth.route");
-const pg = require("./db/pg");
+const middlewares = require("./middlewares/index");
 
 const app = express();
 
 app.use(helmet());
 app.use(express.json());
+
+app.use(middlewares.handleEmptyPayload);
+app.use(middlewares.contentTypeSet);
+app.use(middlewares.contentTypejson);
+app.use(middlewares.handleErrors);
+app.use(middlewares.setResponseHeaders);
+
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 
