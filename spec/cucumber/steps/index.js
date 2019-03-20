@@ -5,12 +5,7 @@ const { When, Then } = require("cucumber");
 When(
   /^the client creates a (GET|POST|PATCH|PUT|DELETE|OPTIONS|HEAD) request to ([/\w-:.]+)$/,
   function(method, path) {
-    this.request = superagent(
-      method,
-      `${process.env.SERVER_PROTOCOL}://${process.env.SERVER_HOSTNAME}:${
-        process.env.SERVER_PORT
-      }${path}`
-    );
+    this.request = superagent(method, `localhost:5000/test`);
   }
 );
 
@@ -36,10 +31,12 @@ When(/^attaches a generic (.+) payload$/, function(payloadType) {
 When(/^sends the request$/, function(callback) {
   this.request
     .then(response => {
+      console.log("success", response);
       this.response = response.res;
       callback();
     })
     .catch(errResponse => {
+      console.log("failed", errResponse);
       this.response = errResponse.response;
       callback();
     });

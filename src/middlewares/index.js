@@ -4,7 +4,7 @@ const contentTypeJson = require("./json-content-type");
 const handleErrors = require("./error-handler");
 const setResponseHeaders = require("./set-response-headers");
 
-exports = {
+module.exports = {
   handleEmptyPayload,
   contentTypeJson,
   contentTypeSet,

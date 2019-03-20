@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use(middlewares.handleEmptyPayload);
 app.use(middlewares.contentTypeSet);
-app.use(middlewares.contentTypejson);
+app.use(middlewares.contentTypeJson);
 app.use(middlewares.handleErrors);
 app.use(middlewares.setResponseHeaders);
 
