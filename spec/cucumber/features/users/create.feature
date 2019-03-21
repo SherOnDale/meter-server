@@ -30,7 +30,7 @@ Feature: Create User
     And attaches a Create User payload which is missing the <missingFields> field
     And sends the request
     Then our API should respond with a 400 HTTP status code
-    And the content type of the respones should be JSON
+    And the content type of the response should be JSON
     And the payload of the response should be a JSON object
     And contains an error property set to true
     And contains a message property which says "Payload must contain at least the email field"

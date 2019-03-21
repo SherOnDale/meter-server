@@ -6,7 +6,7 @@ const { getValidPayload, convertStringToArray } = require("./utils");
 When(
   /^the client creates a (GET|POST|PATCH|PUT|DELETE|OPTIONS|HEAD) request to ([/\w-:.]+)$/,
   function(method, path) {
-    this.request = superagent(method, `localhost:5000/${path}`);
+    this.request = superagent(method, `localhost:5000${path}`);
   }
 );
 
