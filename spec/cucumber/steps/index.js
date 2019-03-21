@@ -28,23 +28,26 @@ When(/^attaches a generic (.+) payload$/, function(payloadType) {
   }
 });
 
+When(/^without a (?:"|')([\w-]+)(?:"|') header set$/, function(headerName) {
+  this.request.unset(headerName);
+});
+
 When(/^sends the request$/, function(callback) {
   this.request
     .then(response => {
-      console.log("success", response);
       this.response = response.res;
       callback();
     })
     .catch(errResponse => {
-      console.log("failed", errResponse);
       this.response = errResponse.response;
       callback();
     });
 });
 
-Then("our API should response with a {int} HTTP status code", function(
+Then(/^our API should respond with a ([1-5]\d{2}) HTTP status code$/, function(
   statusCode
 ) {
+  if (statusCode == 415) console.log(this.response);
   assert.equal(this.response.statusCode, statusCode);
 });
 

@@ -8,7 +8,7 @@ Feature: General
         And attaches a generic empty payload
         And sends the request
         Then our API should respond with a 400 HTTP status code
-        And the content type of of the response should be JSON
+        And the content type of the response should be JSON
         And the payload of the response should be a JSON object
         And contains an error property set to true
         And contains a message property which says "Payload should not be empty"
@@ -25,8 +25,9 @@ Feature: General
 
         When the client creates a <method> request to /users
         And attaches a generic non-JSON payload
+        But without a "Content-Type" header set
         And sends the request
-        Then our API should response with a 400 HTTP status code
+        Then our API should respond with a 400 HTTP status code
         And the content type of the response should be JSON
         And the payload of the response should be a JSON object
         And contains an error property set to true
