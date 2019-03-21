@@ -5,7 +5,7 @@ const { When, Then } = require("cucumber");
 When(
   /^the client creates a (GET|POST|PATCH|PUT|DELETE|OPTIONS|HEAD) request to ([/\w-:.]+)$/,
   function(method, path) {
-    this.request = superagent(method, `localhost:5000/test`);
+    this.request = superagent(method, `localhost:5000/${path}`);
   }
 );
 
@@ -47,7 +47,6 @@ When(/^sends the request$/, function(callback) {
 Then(/^our API should respond with a ([1-5]\d{2}) HTTP status code$/, function(
   statusCode
 ) {
-  if (statusCode == 415) console.log(this.response);
   assert.equal(this.response.statusCode, statusCode);
 });
 
