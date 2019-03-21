@@ -19,4 +19,4 @@ function convertStringToArray(string) {
     .filter(s => s !== "");
 }
 
-exports = { getValidPayload, convertStringToArray };
+module.exports = { getValidPayload, convertStringToArray };

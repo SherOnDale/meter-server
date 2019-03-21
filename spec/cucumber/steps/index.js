@@ -1,6 +1,7 @@
 const superagent = require("superagent");
 const assert = require("assert");
 const { When, Then } = require("cucumber");
+const { getValidPayload, convertStringToArray } = require("./utils");
 
 When(
   /^the client creates a (GET|POST|PATCH|PUT|DELETE|OPTIONS|HEAD) request to ([/\w-:.]+)$/,
@@ -30,6 +31,66 @@ When(/^attaches a generic (.+) payload$/, function(payloadType) {
 
 When(/^without a (?:"|')([\w-]+)(?:"|') header set$/, function(headerName) {
   this.request.unset(headerName);
+});
+
+When(
+  /^attaches an? (.+) payload which is missing the ([a-zA-Z0-9, ]+) fields?$/,
+  function(payloadType, missingFields) {
+    const payload = getValidPayload(payloadType);
+    const fieldsToDelete = convertStringToArray(missingFields);
+    fieldsToDelete.forEach(field => delete payload[field]);
+    this.request
+      .send(JSON.stringify(payload))
+      .set("Content-Type", "application/json");
+  }
+);
+
+When(
+  /^attaches an? (.+) payload where the ([a-zA-Z0-9, ]+) fields? (?:is|are)(\s+not)? a ([a-zA-Z]+)$/,
+  function(payloadType, fields, invert, type) {
+    const payload = getValidPayload(payloadType);
+    const typeKey = type.toLowerCase();
+    const invertKey = invert ? "not" : "is";
+    const sampleValues = {
+      string: {
+        is: "string",
+        not: 10
+      }
+    };
+    const fieldsToModify = convertStringToArray(fields);
+    fieldsToModify.forEach(field => {
+      payload[field] = sampleValues[typeKey][invertKey];
+    });
+    this.request
+      .send(JSON.stringify(payload))
+      .set("Content-Type", "application/json");
+  }
+);
+
+When(
+  /^attaches an? (.+) payload where the ([a-zA-Z0-9, ]+) fields? (?:is|are) exactly (.+)$/,
+  function(payloadType, fields, value) {
+    const payload = getValidPayload(payloadType);
+    const fieldsToModify = convertStringToArray(fields);
+    fieldsToModify.forEach(field => {
+      payload[field] = value;
+    });
+    this.request
+      .send(JSON.stringify(payload))
+      .set("Content-Type", "application/json");
+  }
+);
+
+When(/^attaches (.+) as the payload$/, function(payload) {
+  this.requestPayload = JSON.parse(payload);
+  this.request.send(payload).set("Content-Type", "application/json");
+});
+
+When(/^attaches a valid (.+) payload$/, function(payloadType) {
+  this.requestPayload = getValidPayload(payloadType);
+  this.request
+    .set("Content-Type", "application/json")
+    .send(JSON.stringify(this.requestPayload));
 });
 
 When(/^sends the request$/, function(callback) {
