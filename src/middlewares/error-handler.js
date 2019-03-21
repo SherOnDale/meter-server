@@ -1,9 +1,11 @@
+const ResponseBody = require("../helpers/classes/ResponseBody");
+
 module.exports = (error, req, res, next) => {
   if (error.type === "entity.parse.failed") {
-    return res.status(400).send({
-      error: true,
-      message: "Payload should be in JSON format"
-    });
+    const rBody = new ResponseBody();
+    rBody.setMessage("Payload should be in JSON format");
+    rBody.removePayload();
+    return res.status(400).send(rBody);
   }
   next();
 };
