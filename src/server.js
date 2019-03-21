@@ -1,5 +1,6 @@
 const express = require("express");
 const helmet = require("helmet");
+const logger = require("morgan");
 const userRoutes = require("./routes/user.route");
 const authRoutes = require("./routes/auth.route");
 const middlewares = require("./middlewares/index");
@@ -8,6 +9,7 @@ const app = express();
 
 app.use(helmet());
 app.use(express.json());
+app.use(logger("dev"));
 
 app.use(middlewares.handleEmptyPayload);
 app.use(middlewares.contentTypeSet);
