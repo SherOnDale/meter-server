@@ -3,8 +3,9 @@ function getValidPayload(type) {
     case "create user":
       return {
         email: "e@ma.il",
-        password: "password",
-        username: "username"
+        password: "pa2ssWord",
+        firstName: "John",
+        lastName: "Doe"
       };
 
     default:
