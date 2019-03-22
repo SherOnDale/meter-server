@@ -10,6 +10,20 @@ When(
   }
 );
 
+When(
+  /^the client creates a (GET|POST|PATCH|PUT|DELETE|OPTIONS|HEAD) request to ([/\w-:.]+) with empty params$/,
+  function(method, path) {
+    this.request = superagent(method, `localhost:5000${path}`);
+  }
+);
+
+When(
+  /^the client creates a (GET|POST|PATCH|PUT|DELETE|OPTIONS|HEAD) request to ([/\w-:.]+) with (.+) param which is exactly (.+)$/,
+  function(method, path, key, value) {
+    this.request = superagent(method, `localhost:5000${path}?${key}=${value}`);
+  }
+);
+
 When(/^attaches a generic (.+) payload$/, function(payloadType) {
   switch (payloadType) {
     case "malformed":
@@ -35,6 +49,18 @@ When(/^without a (?:"|')([\w-]+)(?:"|') header set$/, function(headerName) {
 
 When(
   /^attaches an? (.+) payload which is missing the ([a-zA-Z0-9, ]+) fields?$/,
+  function(payloadType, missingFields) {
+    const payload = getValidPayload(payloadType);
+    const fieldsToDelete = convertStringToArray(missingFields);
+    fieldsToDelete.forEach(field => delete payload[field]);
+    this.request
+      .send(JSON.stringify(payload))
+      .set("Content-Type", "application/json");
+  }
+);
+
+When(
+  /^attaches an? (.+) query which is missing the ([a-zA-Z0-9, ]+) fields?$/,
   function(payloadType, missingFields) {
     const payload = getValidPayload(payloadType);
     const fieldsToDelete = convertStringToArray(missingFields);
@@ -138,4 +164,22 @@ Then(/^contains a message property which says (?:"|')(.*)(?:"|')$/, function(
   message
 ) {
   assert.equal(this.responsePayload.message, message);
+});
+
+Then(/^contains a payload property of type object$/, function() {
+  assert.equal(typeof this.responsePayload.payload, "object");
+});
+
+Then(
+  /^the payload contains a property (.+) of type (string|boolean|number)$/,
+  function(key, type) {
+    assert.equal(typeof this.responsePayload.payload[key], type);
+  }
+);
+
+Then(/^the payload contains a property (.+) set to (.+)$/, function(
+  key,
+  value
+) {
+  assert.equal(String(this.responsePayload.payload[key]), value);
 });
