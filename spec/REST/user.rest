@@ -1,0 +1,10 @@
+###GET /users
+GET http://localhost:5000/users
+
+###GET /users?email=<email>
+
+GET http://localhost:5000/users?email=sherinbinu@hotmail.com
+
+
+###DELETE /users
+DELETE http://localhost:5000/users

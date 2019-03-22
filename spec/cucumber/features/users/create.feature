@@ -1,6 +1,6 @@
 Feature: Create User
 
-  Clients should be able to send a request to our API in order to create a user. Our API should validate the structure of the payload and response with and error if it is invalid.
+  Clients should be able to send a request to our API in order to create a user. Our API should validate the structure of the payload and response with an error if it is invalid.
 
   Scenario Outline: Bad Client requests
 
@@ -33,12 +33,15 @@ Feature: Create User
     And the content type of the response should be JSON
     And the payload of the response should be a JSON object
     And contains an error property set to true
-    And contains a message property which says "Payload must contain at least the email field"
+    And contains a message property which says "Payload must contain at least the email, firstName, lastName, avatar and password fields"
 
     Examples:
 
       | missingFields |
       | email         |
+      | firstName     |
+      | lastName      |
+      | password      |
 
 
   Scenario Outline: Request Payload with Properties of Unsupported Type
@@ -52,11 +55,14 @@ Feature: Create User
     And the content type of the response should be JSON
     And the payload of the response should be a JSON object
     And contains an error property set to true
-    And contains a message property which says "The email must be of type string"
+    And contains a message property which says "The email, firstName, lastName and password must be of type string"
 
     Examples:
-      | field | type   |
-      | email | string |
+      | field     | type   |
+      | email     | string |
+      | firstName | string |
+      | lastName  | string |
+      | password  | string |
 
   Scenario Outline: Request Payload with invalid email format
 
@@ -78,19 +84,38 @@ Feature: Create User
       | a@1.2.3.4 |
       | a.b.c@!!  |
 
-  Scenario: Minimal Valid User
+  Scenario Outline: Request Payload with invalid password
 
-    If the client sends a POST request to /users with valid payload, they should receive a response with a 200 status code
+    If the client sends a POST request to /users with invalid password, they should receive a response with a 400 status code
 
     When the client creates a POST request to /users
-    And attaches a valid Create User payload
+    And attaches a Create User payload where the password field is exactly <password>
     And sends the request
-    Then our API should respond with a 201 HTTP status code
+    Then our API should respond with a 400 HTTP status code
     And the content type of the response should be JSON
     And the payload of the response should be a JSON object
-    And contains an error property set to false
-    And contains a message property which says "Successfully created a new user"
-    And contains a payload property of type object
-    And the payload contains a property userId of type string
-    And the payload object should be added to the database, grouped under the "user" type
-    And the newly-created user should be deleted
+    And contains an error property set to true
+    And contains a message property which says "The password field must be a valid password"
+
+    Examples:
+      | password |
+      | test     |
+      | testtest |
+      | testTest |
+
+# Scenario: Minimal Valid Request
+
+#   If the client sends a POST request to /users with valid payload, they should receive a response with a 200 status code
+
+#   When the client creates a POST request to /users
+#   And attaches a valid Create User payload
+#   And sends the request
+#   Then our API should respond with a 201 HTTP status code
+#   And the content type of the response should be JSON
+#   And the payload of the response should be a JSON object
+#   And contains an error property set to false
+#   And contains a message property which says "Successfully created a new user"
+#   And contains a payload property of type object
+#   And the payload contains a property userId of type string
+#   And the payload object should be added to the database, grouped under the "user" type
+#   And the newly-created user should be deleted
