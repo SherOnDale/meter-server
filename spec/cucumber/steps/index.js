@@ -1,7 +1,8 @@
-const superagent = require("superagent");
-const assert = require("assert");
-const { When, Then } = require("cucumber");
-const { getValidPayload, convertStringToArray } = require("./utils");
+const superagent = require('superagent');
+const assert = require('assert');
+const pg = require('../../../src/db/pg');
+const { When, Then } = require('cucumber');
+const { getValidPayload, convertStringToArray } = require('./utils');
 
 When(
   /^the client creates a (GET|POST|PATCH|PUT|DELETE|OPTIONS|HEAD) request to ([/\w-:.]+)$/,
@@ -26,19 +27,19 @@ When(
 
 When(/^attaches a generic (.+) payload$/, function(payloadType) {
   switch (payloadType) {
-    case "malformed":
+    case 'malformed':
       this.request
-        .set("Content-Type", "application/json")
+        .set('Content-Type', 'application/json')
         .send('{"email": "sherinbinu@hotmail.com", name:}');
       break;
-    case "non-JSON":
+    case 'non-JSON':
       this.request
         .send(
           '<?xml version="1.0" encoding="UTF-8" ?><email>sherinbinu@hotmail.com</email> '
         )
-        .set("Content-Type", "text/xml");
+        .set('Content-Type', 'text/xml');
       break;
-    case "empty":
+    case 'empty':
     default:
   }
 });
@@ -55,7 +56,7 @@ When(
     fieldsToDelete.forEach(field => delete payload[field]);
     this.request
       .send(JSON.stringify(payload))
-      .set("Content-Type", "application/json");
+      .set('Content-Type', 'application/json');
   }
 );
 
@@ -67,7 +68,7 @@ When(
     fieldsToDelete.forEach(field => delete payload[field]);
     this.request
       .send(JSON.stringify(payload))
-      .set("Content-Type", "application/json");
+      .set('Content-Type', 'application/json');
   }
 );
 
@@ -76,10 +77,10 @@ When(
   function(payloadType, fields, invert, type) {
     const payload = getValidPayload(payloadType);
     const typeKey = type.toLowerCase();
-    const invertKey = invert ? "not" : "is";
+    const invertKey = invert ? 'not' : 'is';
     const sampleValues = {
       string: {
-        is: "string",
+        is: 'string',
         not: 10
       }
     };
@@ -89,7 +90,7 @@ When(
     });
     this.request
       .send(JSON.stringify(payload))
-      .set("Content-Type", "application/json");
+      .set('Content-Type', 'application/json');
   }
 );
 
@@ -103,19 +104,19 @@ When(
     });
     this.request
       .send(JSON.stringify(payload))
-      .set("Content-Type", "application/json");
+      .set('Content-Type', 'application/json');
   }
 );
 
 When(/^attaches (.+) as the payload$/, function(payload) {
   this.requestPayload = JSON.parse(payload);
-  this.request.send(payload).set("Content-Type", "application/json");
+  this.request.send(payload).set('Content-Type', 'application/json');
 });
 
 When(/^attaches a valid (.+) payload$/, function(payloadType) {
   this.requestPayload = getValidPayload(payloadType);
   this.request
-    .set("Content-Type", "application/json")
+    .set('Content-Type', 'application/json')
     .send(JSON.stringify(this.requestPayload));
 });
 
@@ -139,20 +140,20 @@ Then(/^our API should respond with a ([1-5]\d{2}) HTTP status code$/, function(
 
 Then(/^the content type of the response should be JSON$/, function() {
   let contentType =
-    this.response.headers["Content-Type"] ||
-    this.response.headers["content-type"];
+    this.response.headers['Content-Type'] ||
+    this.response.headers['content-type'];
   contentType = contentType.substring(
-    contentType.indexOf("application/json"),
-    "application/json".length
+    contentType.indexOf('application/json'),
+    'application/json'.length
   );
-  assert.equal(contentType, "application/json");
+  assert.equal(contentType, 'application/json');
 });
 
 Then(/^the payload of the response should be a JSON object$/, function() {
   try {
     this.responsePayload = JSON.parse(this.response.text);
   } catch (e) {
-    throw new Error("Response not a valid JSON object");
+    throw new Error('Response not a valid JSON object');
   }
 });
 
@@ -167,7 +168,7 @@ Then(/^contains a message property which says (?:"|')(.*)(?:"|')$/, function(
 });
 
 Then(/^contains a payload property of type object$/, function() {
-  assert.equal(typeof this.responsePayload.payload, "object");
+  assert.equal(typeof this.responsePayload.payload, 'object');
 });
 
 Then(
@@ -182,4 +183,11 @@ Then(/^the payload contains a property (.+) set to (.+)$/, function(
   value
 ) {
   assert.equal(String(this.responsePayload.payload[key]), value);
+});
+
+Then(/^delete the test record$/, function(done) {
+  pg.query("DELETE FROM users WHERE email = 'e@ma.il'", error => {
+    assert.equal(error, undefined);
+    done();
+  });
 });
