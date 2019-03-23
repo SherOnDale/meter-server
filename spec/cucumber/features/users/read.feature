@@ -33,11 +33,20 @@ Feature: Read User
       | a@1.2.3.4 |
       | a.b.c@!!  |
 
-  Scenario: Minimal Valid Request
+  Scenario: Minimal Valid Request with Existing User as Payload
 
     If the client sends a GET request to /users with valid payload, they should receive a response with a 200 status code
 
-    When the client creates a GET request to /users with email param which is exactly test@example.com
+    When the client creates a POST request to /users
+    And attaches a valid Create User payload
+    And sends the request
+    Then our API should respond with a 201 HTTP status code
+    And the content type of the response should be JSON
+    And the payload of the response should be a JSON object
+    And contains an error property set to false
+    And contains a message property which says "Successfully created a new user"
+    And contains a payload property of type object
+    When the client creates a GET request to /users with email param which is exactly e@ma.il
     And sends the request
     Then our API should respond with a 200 HTTP status code
     And the content type of the response should be JSON
@@ -46,10 +55,13 @@ Feature: Read User
     And contains a message property which says "Successfully performed the operation"
     And contains a payload property of type object
     And the payload contains a property exists of type boolean
+    And the payload contains a property exists set to true
+    And delete the test record
 
 
 
-  Scenario: Not Existing User
+
+  Scenario: Minimal Valid Request with Non-Existing User as Payload
 
     If the client sends a GET request to /users with an email that does not exist, they should receive a response with a exists key set to false
 

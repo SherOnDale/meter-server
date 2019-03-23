@@ -33,7 +33,7 @@ Feature: Create User
     And the content type of the response should be JSON
     And the payload of the response should be a JSON object
     And contains an error property set to true
-    And contains a message property which says "Payload must contain at least the email, firstName, lastName, avatar and password fields"
+    And contains a message property which says "Payload must contain at least the email, firstName, lastName and password fields"
 
     Examples:
 
@@ -103,19 +103,17 @@ Feature: Create User
       | testtest |
       | testTest |
 
-# Scenario: Minimal Valid Request
+  Scenario: Minimal Valid Request
 
-#   If the client sends a POST request to /users with valid payload, they should receive a response with a 200 status code
+    If the client sends a POST request to /users with valid payload, they should receive a response with a 200 status code
 
-#   When the client creates a POST request to /users
-#   And attaches a valid Create User payload
-#   And sends the request
-#   Then our API should respond with a 201 HTTP status code
-#   And the content type of the response should be JSON
-#   And the payload of the response should be a JSON object
-#   And contains an error property set to false
-#   And contains a message property which says "Successfully created a new user"
-#   And contains a payload property of type object
-#   And the payload contains a property userId of type string
-#   And the payload object should be added to the database, grouped under the "user" type
-#   And the newly-created user should be deleted
+    When the client creates a POST request to /users
+    And attaches a valid Create User payload
+    And sends the request
+    Then our API should respond with a 201 HTTP status code
+    And the content type of the response should be JSON
+    And the payload of the response should be a JSON object
+    And contains an error property set to false
+    And contains a message property which says "Successfully created a new user"
+    And contains a payload property of type object
+    And delete the test record
