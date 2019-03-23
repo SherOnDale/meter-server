@@ -27,3 +27,7 @@ Content-Type: application/json
   "lastName": "User",
   "password": "pass1244P"
 }
+
+###GET /users/:hash
+
+GET http://localhost:5000/users/34115ff931acccdd20d3f89db5cb890aeeb4fe6f

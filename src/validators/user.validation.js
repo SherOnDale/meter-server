@@ -53,8 +53,15 @@ function readyByEmailValidation(body) {
   }
 }
 
+function verifyAccountValidation(body) {
+  if (!/^[0-9a-f]{40}$/.test(body.hash)) {
+    return new ValidationError('Please enter a valid hash');
+  }
+}
+
 module.exports = {
   createUserValidation,
   setPofileValidation,
-  readyByEmailValidation
+  readyByEmailValidation,
+  verifyAccountValidation
 };

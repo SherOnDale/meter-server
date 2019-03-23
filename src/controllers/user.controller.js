@@ -81,7 +81,6 @@ const setProfile = (req, res) => {
         resBody.removePayload();
         return res.status(500).json(resBody);
       }
-      console.log(result.rowCount);
       if (result.rowCount !== 1) {
         resBody.setMessage('Provided email adddress does not exist');
         resBody.removePayload();
@@ -120,7 +119,39 @@ const readByEmail = (req, res) => {
   );
 };
 
-const activate = (req, res) => {};
+const activate = (req, res) => {
+  const resBody = new ResponseBody();
+
+  //validate payload
+  const validationResults = validate.verifyAccountValidation(req.params);
+  if (validationResults instanceof ValidationError) {
+    resBody.setMessage(validationResults.message);
+    return res.status(400).json(resBody);
+  }
+
+  //activate account
+  pg.query(
+    'UPDATE users SET verified = TRUE WHERE email_hash = $1',
+    [req.params.hash],
+    (error, results) => {
+      if (error) {
+        resBody.setMessage(error.message);
+        resBody.removePayload();
+        return res.status(500).json(resBody);
+      }
+      if (results.rowCount !== 1) {
+        resBody.setMessage('Provided email adddress does not exist');
+        resBody.removePayload();
+        return res.status(400).json(resBody);
+      }
+      resBody.setSuccess();
+      resBody.setMessage('Successfully verified the account');
+      resBody.removePayload();
+      return res.json(resBody);
+    }
+  );
+};
+
 const read = (req, res) => {
   pg.query('SELECT * FROM users ORDER BY id ASC', (error, users) => {
     const resBody = new ResponseBody();
