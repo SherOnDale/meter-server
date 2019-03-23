@@ -7,7 +7,10 @@ router
   .post(userController.createAccount)
   .put(userController.setProfile);
 
-router.route('/all').get(userController.read);
+router
+  .route('/v2')
+  .get(userController.read)
+  .post(userController.create);
 
 router.route('/:hash').get(userController.activate);
 

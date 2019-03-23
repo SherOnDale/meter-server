@@ -4,9 +4,9 @@ Feature: Create User
 
   Scenario Outline: Bad Client requests
 
-    If the client sends a POST request to /users with a bad payload, they should receive a response with a 400 status code
+    If the client sends a POST request to /users/v2 with a bad payload, they should receive a response with a 400 status code
 
-    When the client creates a POST request to /users
+    When the client creates a POST request to /users/v2
     And attaches a generic <payloadType> payload
     And sends the request
     Then our API should respond with a <statusCode> HTTP status code
@@ -24,9 +24,9 @@ Feature: Create User
 
   Scenario Outline: Bad Request Payload
 
-    If the client sends a POST request to /users with missing fields, they should receive a response with a 400 status code.
+    If the client sends a POST request to /users/v2 with missing fields, they should receive a response with a 400 status code.
 
-    When the client creates a POST request to /users
+    When the client creates a POST request to /users/v2
     And attaches a Create User payload which is missing the <missingFields> field
     And sends the request
     Then our API should respond with a 400 HTTP status code
@@ -46,9 +46,9 @@ Feature: Create User
 
   Scenario Outline: Request Payload with Properties of Unsupported Type
 
-    If the client sends a POST request to /users with invalid types, they should receive a response with a 400 status code.
+    If the client sends a POST request to /users/v2 with invalid types, they should receive a response with a 400 status code.
 
-    When the client creates a POST request to /users
+    When the client creates a POST request to /users/v2
     And attaches a Create User payload where the <field> field is not a <type>
     And sends the request
     Then our API should respond with a 400 HTTP status code
@@ -66,9 +66,9 @@ Feature: Create User
 
   Scenario Outline: Request Payload with invalid email format
 
-    If the client sends a POST request to /users with invalid email, they should receive a response with a 400 status code
+    If the client sends a POST request to /users/v2 with invalid email, they should receive a response with a 400 status code
 
-    When the client creates a POST request to /users
+    When the client creates a POST request to /users/v2
     And attaches a Create User payload where the email field is exactly <email>
     And sends the request
     Then our API should respond with a 400 HTTP status code
@@ -86,9 +86,9 @@ Feature: Create User
 
   Scenario Outline: Request Payload with invalid password
 
-    If the client sends a POST request to /users with invalid password, they should receive a response with a 400 status code
+    If the client sends a POST request to /users/v2 with invalid password, they should receive a response with a 400 status code
 
-    When the client creates a POST request to /users
+    When the client creates a POST request to /users/v2
     And attaches a Create User payload where the password field is exactly <password>
     And sends the request
     Then our API should respond with a 400 HTTP status code
@@ -105,9 +105,9 @@ Feature: Create User
 
   Scenario: Minimal Valid Request
 
-    If the client sends a POST request to /users with valid payload, they should receive a response with a 200 status code
+    If the client sends a POST request to /users/v2 with valid payload, they should receive a response with a 200 status code
 
-    When the client creates a POST request to /users
+    When the client creates a POST request to /users/v2
     And attaches a valid Create User payload
     And sends the request
     Then our API should respond with a 201 HTTP status code
@@ -115,5 +115,4 @@ Feature: Create User
     And the payload of the response should be a JSON object
     And contains an error property set to false
     And contains a message property which says "Successfully created a new user"
-    And contains a payload property of type object
     And delete the test record

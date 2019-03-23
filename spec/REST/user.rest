@@ -1,5 +1,5 @@
 ###GET /users
-GET http://localhost:5000/users/all
+GET http://localhost:5000/users/v2
 
 ###GET /users?email=<email>
 

@@ -45,7 +45,6 @@ Feature: Read User
     And the payload of the response should be a JSON object
     And contains an error property set to false
     And contains a message property which says "Successfully created a new user"
-    And contains a payload property of type object
     When the client creates a GET request to /users with email param which is exactly e@ma.il
     And sends the request
     Then our API should respond with a 200 HTTP status code

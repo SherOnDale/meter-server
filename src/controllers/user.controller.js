@@ -170,10 +170,60 @@ const read = (req, res) => {
   });
 };
 
+const create = (req, res) => {
+  const resBody = new ResponseBody();
+
+  //validate payload
+  const validationResults = validate.createValidation(req.body);
+  if (validationResults instanceof ValidationError) {
+    resBody.setMessage(validationResults.message);
+    return res.status(400).json(resBody);
+  }
+
+  //encrypt payloads
+  const salt = makeSalt();
+  let hashedPassword = '';
+  let hashedemail = '';
+  try {
+    hashedPassword = encryptString(req.body.password, salt);
+    hashedemail = encryptString(req.body.email, salt);
+  } catch (e) {
+    resBody.setMessage('Error encrypting payloads');
+    resBody.removePayload();
+    return res.status(500).json(resBody);
+  }
+
+  //store payloads
+  pg.query(
+    'INSERT INTO users (email, hash, hash_salt, first_name, last_name, email_hash, email_salt) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+    [
+      req.body.email,
+      hashedPassword,
+      salt,
+      req.body.firstName,
+      req.body.lastName,
+      hashedemail,
+      salt
+    ],
+    (error, result) => {
+      if (error) {
+        resBody.setMessage(error.message);
+        resBody.removePayload();
+        return res.status(500).json(resBody);
+      }
+      resBody.setSuccess();
+      resBody.setMessage('Successfully created a new user');
+      resBody.removePayload();
+      return res.status(201).json(resBody);
+    }
+  );
+};
+
 module.exports = {
   read,
   activate,
   readByEmail,
   setProfile,
-  createAccount
+  createAccount,
+  create
 };
