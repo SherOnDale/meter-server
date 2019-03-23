@@ -1,10 +1,21 @@
 ###GET /users
-GET http://localhost:5000/users
+GET http://localhost:5000/users/all
 
 ###GET /users?email=<email>
 
-GET http://localhost:5000/users?email=sherinbinu@hotmail.com
+GET http://localhost:5000/users?email=test@example.com
 
 
 ###DELETE /users
 DELETE http://localhost:5000/users
+
+###POST /users
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+  "email": "test3@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "password": "testTest1"
+}

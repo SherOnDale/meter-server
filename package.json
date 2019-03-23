@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "test": "npm run test:e2e",
+    "test": "POSTGRES_HOST=postgres POSTGRES_USER=postgres POSTGRES_DB=postgres POSTGRES_PASSWORD=test_password POSTGRES_PORT=5432 npm run test:e2e",
     "test:e2e": "cucumber-js spec/cucumber/features --require spec/cucumber/steps"
   },
   "repository": {
