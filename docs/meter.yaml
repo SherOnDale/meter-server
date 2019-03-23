@@ -38,8 +38,8 @@ paths:
       description: Returns the details of all the registered users
       responses:
         "200":
-        description: User Details Retrieved
-        $ref: "#/components/responses/ResponseBody"
+          description: User Details Retrieved
+          $ref: "#/components/responses/ResponseBody"
 components:
   responses:
     ResponseBody:
