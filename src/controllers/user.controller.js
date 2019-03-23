@@ -142,7 +142,7 @@ const activate = (req, res) => {
         return res.status(500).json(resBody);
       }
       if (results.rowCount !== 1) {
-        resBody.setMessage('Provided email adddress does not exist');
+        resBody.setMessage('Provided email address does not exist');
         resBody.removePayload();
         return res.status(400).json(resBody);
       }

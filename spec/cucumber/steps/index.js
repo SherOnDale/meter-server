@@ -191,3 +191,13 @@ Then(/^delete the test record$/, function(done) {
     done();
   });
 });
+
+When(/^create a seed with email_hash set to (.+)$/, function(value, done) {
+  pg.query(
+    "INSERT INTO users (email, email_salt, email_hash) VALUES ('e@ma.il', '123124123', $1)",
+    [value],
+    () => {
+      done();
+    }
+  );
+});
