@@ -4,6 +4,7 @@ const ResponseBody = require('../helpers/classes/ResponseBody');
 const validate = require('../validators/user.validation');
 const makeSalt = require('../helpers/functions/makeSalt');
 const encryptString = require('../helpers/functions/encryptString');
+const filterRow = require('../helpers/functions/filterRow');
 
 const createAccount = (req, res) => {
   const resBody = new ResponseBody();
@@ -110,10 +111,11 @@ const readByEmail = (req, res) => {
         resBody.removePayload();
         return res.status(500).json(resBody);
       }
+      const queryResult = results.rows.map(filterRow);
       resBody.setSuccess();
       resBody.setMessage('Successfully performed the operation');
       resBody.setPayload({ key: 'exists', value: results.rowCount > 0 });
-      resBody.setPayload({ key: 'users', value: results.rows });
+      resBody.setPayload({ key: 'users', value: queryResult });
       res.json(resBody);
     }
   );
@@ -160,9 +162,10 @@ const read = (req, res) => {
       resBody.removePayload();
       return res.status(500).json(resBody);
     }
+    const queryResult = users.rows.map(filterRow);
     resBody.setSuccess();
     resBody.setMessage('Successfully performed the operation');
-    resBody.setPayload({ key: 'users', value: users.rows });
+    resBody.setPayload({ key: 'users', value: queryResult });
     res.json(resBody);
   });
 };

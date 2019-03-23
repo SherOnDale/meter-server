@@ -3,7 +3,7 @@ GET http://localhost:5000/users/all
 
 ###GET /users?email=<email>
 
-GET http://localhost:5000/users?email=test@example.com
+GET http://localhost:5000/users?email=test3@exampqlqe.com
 
 
 ###DELETE /users
