@@ -5,11 +5,11 @@ const validate = require('../validators/user.validation');
 const makeSalt = require('../helpers/functions/makeSalt');
 const encryptString = require('../helpers/functions/encryptString');
 
-const create = (req, res) => {
+const createAccount = (req, res) => {
   const resBody = new ResponseBody();
 
   //validate payload
-  const validationResults = validate.createValidation(req.body);
+  const validationResults = validate.createUserValidation(req.body);
   if (validationResults instanceof ValidationError) {
     resBody.setMessage(validationResults.message);
     return res.status(400).json(resBody);
@@ -17,30 +17,19 @@ const create = (req, res) => {
 
   //encrypt payloads
   const salt = makeSalt();
-  let hashedPassword = '';
   let hashedemail = '';
   try {
-    hashedPassword = encryptString(req.body.password, salt);
     hashedemail = encryptString(req.body.email, salt);
   } catch (e) {
-    resBody.setMessage('Error encrypting payloads');
+    resBody.setMessage('Error encrypting email');
     resBody.removePayload();
     return res.status(500).json(resBody);
   }
 
   //store payloads
   pg.query(
-    'INSERT INTO users (email, hash, salt, fName, lName, avatarUrl, emailHash, referrer) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-    [
-      req.body.email,
-      hashedPassword,
-      salt,
-      req.body.firstName,
-      req.body.lastName,
-      'not-set',
-      hashedemail,
-      'not-set'
-    ],
+    'INSERT INTO users (email, email_salt, email_hash) VALUES ($1, $2, $3)',
+    [req.body.email, salt, hashedemail],
     (error, result) => {
       if (error) {
         resBody.setMessage(error.message);
@@ -49,7 +38,59 @@ const create = (req, res) => {
       }
       resBody.setSuccess();
       resBody.setMessage('Successfully created a new user');
+      resBody.removePayload();
       return res.status(201).json(resBody);
+    }
+  );
+};
+
+const setProfile = (req, res) => {
+  const resBody = new ResponseBody();
+
+  //validate payload
+  const validationResults = validate.setPofileValidation(req.body);
+  if (validationResults instanceof ValidationError) {
+    resBody.setMessage(validationResults.message);
+    return res.status(400).json(resBody);
+  }
+
+  //encrypt payloads
+  const salt = makeSalt();
+  let hashedPassword = '';
+  try {
+    hashedPassword = encryptString(req.body.password, salt);
+  } catch (e) {
+    resBody.setMessage('Error encrypting password');
+    resBody.removePayload();
+    return res.status(500).json(resBody);
+  }
+
+  //store payloads
+  pg.query(
+    'UPDATE users SET first_name = $1, last_name = $2, hash = $3, hash_salt = $4, profile = TRUE WHERE email = $5',
+    [
+      req.body.firstName,
+      req.body.lastName,
+      hashedPassword,
+      salt,
+      req.body.email
+    ],
+    (error, result) => {
+      if (error) {
+        resBody.setMessage(error.message);
+        resBody.removePayload();
+        return res.status(500).json(resBody);
+      }
+      console.log(result.rowCount);
+      if (result.rowCount !== 1) {
+        resBody.setMessage('Provided email adddress does not exist');
+        resBody.removePayload();
+        return res.status(400).json(resBody);
+      }
+      resBody.setSuccess();
+      resBody.setMessage('Successfully set the user profile');
+      resBody.removePayload();
+      return res.json(resBody);
     }
   );
 };
@@ -80,26 +121,6 @@ const readByEmail = (req, res) => {
 };
 
 const activate = (req, res) => {};
-
-const remove = (req, res) => {
-  const resBody = new ResponseBody();
-  resBody.removePayload();
-  if (process.env.NODE_ENV === 'development') {
-    pg.query('TRUNCATE users', error => {
-      if (error) {
-        resBody.setMessage(error.message);
-        return res.status(500).json(resBody);
-      }
-      resBody.setSuccess();
-      resBody.setMessage('Successfully deleted the table');
-      res.json(resBody);
-    });
-  } else {
-    resBody.setMessage('This operation is only available in development');
-    res.status(400).json(resBody);
-  }
-};
-
 const read = (req, res) => {
   pg.query('SELECT * FROM users ORDER BY id ASC', (error, users) => {
     const resBody = new ResponseBody();
@@ -116,9 +137,9 @@ const read = (req, res) => {
 };
 
 module.exports = {
-  create,
   read,
   activate,
-  remove,
-  readByEmail
+  readByEmail,
+  setProfile,
+  createAccount
 };

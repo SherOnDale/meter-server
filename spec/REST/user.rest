@@ -14,8 +14,16 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-  "email": "test3@example.com",
-  "firstName": "John",
-  "lastName": "Doe",
-  "password": "testTest1"
+  "email": "test3@exampqlqe.com"
+}
+
+###PUT /users
+PUT http://localhost:5000/users
+Content-Type: application/json
+
+{
+  "email": "test3@exampqlqe.com",
+  "firstName": "Test",
+  "lastName": "User",
+  "password": "pass1244P"
 }

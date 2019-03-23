@@ -1,14 +1,14 @@
-const router = require("express").Router();
-const userController = require("../controllers/user.controller");
+const router = require('express').Router();
+const userController = require('../controllers/user.controller');
 
 router
-  .route("/")
+  .route('/')
   .get(userController.readByEmail)
-  .post(userController.create)
-  .delete(userController.remove);
+  .post(userController.createAccount)
+  .put(userController.setProfile);
 
-router.route("/all").get(userController.read);
+router.route('/all').get(userController.read);
 
-router.route("/:hash").get(userController.activate);
+router.route('/:hash').get(userController.activate);
 
 module.exports = router;
