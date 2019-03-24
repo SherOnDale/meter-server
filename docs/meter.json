@@ -35,9 +35,10 @@
             "in": "body",
             "name": "body",
             "description": "Request Body",
-            "required": ["email"],
+            "required": true,
             "schema": {
               "type": "object",
+              "required": ["email"],
               "properties": {
                 "email": {
                   "type": "string",
