@@ -38,7 +38,7 @@
             "required": true,
             "schema": {
               "type": "object",
-              "required": true,
+              "required": ["email"],
               "properties": {
                 "email": {
                   "type": "string",
