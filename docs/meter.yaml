@@ -30,6 +30,21 @@ paths:
         "200":
           description: User Details Retrieved
           $ref: "#/components/responses/ResponseBody"
+    post:
+      tags:
+        - Users
+      summary: Register a new User with the provided email
+      description: Register a new User with the provided email
+      requestBody:
+        description: Request Body to create new User
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                type: string
+                format: email
   /users/v2:
     get:
       tags:

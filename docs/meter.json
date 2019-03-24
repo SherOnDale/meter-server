@@ -1,0 +1,48 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API Documentation of Meter - A Revolution Backed by Energy",
+    "version": "1.0.0",
+    "title": "Meter",
+    "termsOfService": "https://meter.io/tos",
+    "contact": {
+      "email": "contact@meter.io"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "api.meter.io",
+  "tags": [
+    {
+      "name": "user",
+      "description": "Operations about user"
+    }
+  ],
+  "schemas": ["https", "http"],
+  "paths": {
+    "/user": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Register a new user",
+        "description": "Register a new user",
+        "operationId": "registerUser",
+        "consumes": ["applicatoin/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "email",
+            "description": "User email that needs ",
+            "required": "true",
+            "schema": {
+              "type": "object",
+              "format": "email"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
