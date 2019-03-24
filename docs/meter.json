@@ -36,10 +36,8 @@
             "name": "email",
             "description": "User email that needs ",
             "required": true,
-            "schema": {
-              "type": "object",
-              "format": "email"
-            }
+            "type": "string",
+            "format": "email"
           }
         ],
         "responses": {
