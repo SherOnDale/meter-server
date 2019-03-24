@@ -22,7 +22,24 @@
   ],
   "schemes": ["https", "http"],
   "paths": {
-    "/user": {
+    "/users": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Get details of an user based on the provided email",
+        "description": "Get details of an user based on the provided email",
+        "operationId": "readUser",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "description": "Email of the user",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          }
+        ]
+      },
       "post": {
         "tags": ["user"],
         "summary": "Register a new user",
@@ -51,6 +68,12 @@
         "responses": {
           "400": {
             "description": "Invalid Payload"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "201": {
+            "description": "Registration Successful"
           }
         }
       }
