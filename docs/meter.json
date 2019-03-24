@@ -35,13 +35,18 @@
             "in": "body",
             "name": "email",
             "description": "User email that needs ",
-            "required": "true",
+            "required": true,
             "schema": {
               "type": "object",
               "format": "email"
             }
           }
-        ]
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Payload"
+          }
+        }
       }
     }
   }
