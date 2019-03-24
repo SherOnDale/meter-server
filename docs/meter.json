@@ -20,7 +20,7 @@
       "description": "Operations about user"
     }
   ],
-  "schemas": ["https", "http"],
+  "schemes": ["https", "http"],
   "paths": {
     "/user": {
       "post": {
@@ -33,12 +33,17 @@
         "parameters": [
           {
             "in": "body",
-            "name": "email",
-            "description": "User email that needs ",
-            "required": true,
+            "name": "body",
+            "description": "Request Body",
+            "required": ["email"],
             "schema": {
-              "type": "string",
-              "format": "email"
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                }
+              }
             }
           }
         ],
