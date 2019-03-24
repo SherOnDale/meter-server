@@ -87,6 +87,55 @@
             "description": "Registration Successful"
           }
         }
+      },
+      "put": {
+        "tags": ["user"],
+        "summary": "Set user profile",
+        "description": "Set user profile",
+        "operationId": "setProfile",
+        "consumes": ["applicatoin/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Request Body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["email", "firstName", "lastName", "password"],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "firstName": {
+                  "type": "string",
+                  "format": "/.+/"
+                },
+                "lastName": {
+                  "type": "string",
+                  "format": "/.+"
+                },
+                "password": {
+                  "type": "string",
+                  "format": "/^(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Payload"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "Operation Successful"
+          }
+        }
       }
     }
   }
