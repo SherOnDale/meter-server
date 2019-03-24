@@ -38,7 +38,18 @@
             "type": "string",
             "format": "email"
           }
-        ]
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Payload"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "Operation Successful"
+          }
+        }
       },
       "post": {
         "tags": ["user"],
