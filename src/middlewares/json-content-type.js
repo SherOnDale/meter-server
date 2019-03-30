@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
   ) {
     const rBody = new ResponseBody();
     rBody.setMessage(
-      'The "Content-Type" header must always be "application/json" or "multipart/form-data'
+      'The "Content-Type" header must always be "application/json" or "multipart/form-data"'
     );
     rBody.removePayload();
     rBody.removePayload();

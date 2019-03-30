@@ -74,7 +74,7 @@ const setProfile = (req, res) => {
       req.body.lastName,
       hashedPassword,
       salt,
-      req.file.path,
+      req.file && req.file.path ? req.file.path : null,
       req.body.email
     ],
     (error, result) => {
