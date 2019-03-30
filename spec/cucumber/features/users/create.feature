@@ -17,10 +17,10 @@ Feature: Create User
 
     Examples:
 
-      | payloadType | statusCode | message                                                       |
-      | empty       | 400        | 'Payload should not be empty'                                 |
-      | non-JSON    | 415        | 'The "Content-Type" header must always be "application/json"' |
-      | malformed   | 400        | "Payload should be in JSON format"                            |
+      | payloadType | statusCode | message                                                                                |
+      | empty       | 400        | 'Payload should not be empty'                                                          |
+      | non-JSON    | 415        | 'The "Content-Type" header must always be "application/json" or "multipart/form-data"' |
+      | malformed   | 400        | "Payload should be in JSON format"                                                     |
 
   Scenario Outline: Bad Request Payload
 

@@ -13,10 +13,10 @@ Feature: Set Profile
 
     Examples:
 
-      | payloadType | statusCode | message                                                       |
-      | empty       | 400        | 'Payload should not be empty'                                 |
-      | non-JSON    | 415        | 'The "Content-Type" header must always be "application/json"' |
-      | malformed   | 400        | "Payload should be in JSON format"                            |
+      | payloadType | statusCode | message                                                                                |
+      | empty       | 400        | 'Payload should not be empty'                                                          |
+      | non-JSON    | 415        | 'The "Content-Type" header must always be "application/json" or "multipart/form-data"' |
+      | malformed   | 400        | "Payload should be in JSON format"                                                     |
 
   Scenario Outline: Bad Request Payload
 
@@ -114,6 +114,28 @@ Feature: Set Profile
   Scenario: Minimal Valid Payload
 
     If the client sends a PUT request to /users with valid payload, they should receive a response with a 200 status code
+
+    When the client creates a POST request to /users
+    And attaches a valid Create User payload
+    And sends the request
+    Then our API should respond with a 201 HTTP status code
+    And the content type of the response should be JSON
+    And the payload of the response should be a JSON object
+    And contains an error property set to false
+    And contains a message property which says "Successfully created a new user"
+    When the client creates a PUT request to /users
+    And attaches a valid Create User payload
+    And sends the request
+    Then our API should respond with a 200 HTTP status code
+    And the content type of the response should be JSON
+    And the payload of the response should be a JSON object
+    And contains an error property set to false
+    And contains a message property which says "Successfully set the user profile"
+    And delete the test record
+
+  Scenario: Valid Payload with Avatar
+
+    If the client sends a PUT request to /users with valid payload with avatar, they should receive a response with a 200 status code
 
     When the client creates a POST request to /users
     And attaches a valid Create User payload

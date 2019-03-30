@@ -50,6 +50,6 @@ Feature: General
         And the content type of the response should be JSON
         And the payload of the response should be a JSON object
         And contains an error property set to true
-        And contains a message property which says 'The "Content-Type" header must always be "application/json"'
+        And contains a message property which says 'The "Content-Type" header must always be "application/json" or "multipart/form-data"'
 
 
