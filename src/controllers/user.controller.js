@@ -68,12 +68,13 @@ const setProfile = (req, res) => {
 
   //store payloads
   pg.query(
-    'UPDATE users SET first_name = $1, last_name = $2, hash = $3, hash_salt = $4, profile = TRUE WHERE email = $5',
+    'UPDATE users SET first_name = $1, last_name = $2, hash = $3, hash_salt = $4, profile = TRUE, avatar_url = $5 WHERE email = $6',
     [
       req.body.firstName,
       req.body.lastName,
       hashedPassword,
       salt,
+      req.file.path,
       req.body.email
     ],
     (error, result) => {
